@@ -1,0 +1,20 @@
+- name: Création du répertoire racine du site web
+  file:
+    path: "/var/www/{{ domain_name.split('.')[1] }}/{{ domain_name.split('.')[0] }}"
+    state: directory
+    owner: www-data
+    mode: '0755'
+
+- name: Création du fichier de configuration du virtual host
+  template:
+    src: virtualhost_template.j2
+    dest: "/etc/apache2/sites-available/{{ domain_name }}.conf"
+    
+- name: Création du lien symbolique pour le fichier de configuration du virtual host
+  
+- name: Activer le virtual host
+  apache2_site:
+    name: "{{ domain_name }}"
+    state: enabled
+  notify:
+    - restart apache2
